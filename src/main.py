@@ -2,9 +2,9 @@ import cv2
 from PIL import Image
 import os
 from matplotlib import pyplot as plt
-from MaskFunctions.DefaultMaskFunction import DefaultMaskFunction
-from AdministrativeFunctions.DisplayAndSafe import DisplayAndSave
-from CropFunctions.CropMaskOutOfImage import CropMaskOutOfImage
+from src.MaskFunctions.DefaultMaskFunction import DefaultMaskFunction
+from src.AdministrativeFunctions.DisplayAndSafe import DisplayAndSave
+from src.CropFunctions.CropMaskOutOfImage import CropMaskOutOfImage
 # Current implementation Saves Cropped Images in the same parent folder as Original Images
 DATA_PATH = "D:\Programmieren\MasterOfDisaster\Implementierungen\TestImages_and_Results"
 DATA_PATH_ORIGINAL_IMAGES = os.path.join(DATA_PATH, "OriginalImages_Resized")
@@ -26,6 +26,9 @@ CURRENT_OPEN_TYPE = IMAGE_OPEN_TYPES[1]
 
 # TODO falls Lösung Algorithmus der wie bei KG durch alle möglichen variablen geht, z.b. Größe des Strukturelementes variieren oder anzahl der closing iterationen
 
+
+# TODO überprüfe ob überall auch binarisiert und nicht nur grau (np.where)
+
 if __name__ == '__main__':
     print("hi")
     print(os.listdir(DATA_PATH_ORIGINAL_IMAGES))
@@ -36,4 +39,4 @@ if __name__ == '__main__':
                    datapath_cropped = DATA_PATH_CROPPED_IMAGES,datapath_original = DATA_PATH_ORIGINAL_IMAGES,
                    displayAmount = 2)
 
-    # TODO Progress bar und debugger
+    # TODO Progress bar

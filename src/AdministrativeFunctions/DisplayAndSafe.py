@@ -37,7 +37,7 @@ def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunction = DefaultMaskF
             if resize:
                 image = ResizeFunction(image, resizeDimensions)
             mask = maskfunction(image)
-            croppedImage = CropMaskOutOfImage(image)
+            croppedImage = CropMaskOutOfImage(image, mask)
             centeredImage = CenterImageInFile(croppedImage)
 
             if trueMask is not None:
