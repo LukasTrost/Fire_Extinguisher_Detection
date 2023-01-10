@@ -1,5 +1,6 @@
 import cv2
 from PIL import Image
+from tqdm import tqdm
 import os
 from matplotlib import pyplot as plt
 from src.MaskFunctions.DefaultMaskFunction import DefaultMaskFunction
@@ -30,13 +31,13 @@ CURRENT_OPEN_TYPE = IMAGE_OPEN_TYPES[1]
 # TODO überprüfe ob überall auch binarisiert und nicht nur grau (np.where)
 
 if __name__ == '__main__':
-    print("hi")
-    print(os.listdir(DATA_PATH_ORIGINAL_IMAGES))
+    #print(os.listdir(DATA_PATH_ORIGINAL_IMAGES))
 
     cropfunction = CropMaskOutOfImage
-    maskfunction = DefaultMaskFunction
-    DisplayAndSave(maskfunction=maskfunction, cropfunction=cropfunction, resize=True, resizeDimensions= [480,640],
+    maskfunctions = DefaultMaskFunction
+    DisplayAndSave(maskfunction=maskfunction, cropfunction=cropfunction, resize=True, resizeDimensions= [30,30],
                    datapath_cropped = DATA_PATH_CROPPED_IMAGES,datapath_original = DATA_PATH_ORIGINAL_IMAGES,
                    displayAmount = 2)
 
-    # TODO Progress bar
+    # TODO fix bugs,
+    #TODO cropped out images are very glitchy fix that
