@@ -5,6 +5,9 @@ def CalculateAccuracy(mask, trueMask):
     # calculate percentage of differing pixels
 
     if mask.shape != trueMask.shape:
+        print(mask.shape)
+        print(trueMask.shape)
+
         raise ValueError("Mask and trueMask have different shapes")
 
     num_differing_pixels = 0
@@ -18,4 +21,5 @@ def CalculateAccuracy(mask, trueMask):
 
     percentage = num_differing_pixels/size
 
+    #print(percentage)
     return(percentage)

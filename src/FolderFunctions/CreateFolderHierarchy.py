@@ -27,11 +27,10 @@ def CreateFolderForResults(images_and_values, datapath_cropped = ""):
     for idx in range(0, len(images_and_values), 1):
         new_folder_path = os.path.join(datapath, str(idx + 1))
         os.makedirs(new_folder_path)
-        cv2.imwrite(f"{new_folder_path}/Original_"+images_and_values[idx][2], images_and_values[idx][0])
-        cv2.imwrite(f"{new_folder_path}/Cropped_"+images_and_values[idx][2], images_and_values[idx][1])
-        #TODO: implement mask and center then entklammer these
-        #cv2.imwrite(f"{new_folder_path}/Mask_" + images_and_values[idx][2], images_and_values[idx][3])
-        #cv2.imwrite(f"{new_folder_path}/Centered_" + images_and_values[idx][2], images_and_values[idx][4])
+        cv2.imwrite(f"{new_folder_path}\\Original_image_"+images_and_values[idx][2]+ ".jpg", images_and_values[idx][0])
+        cv2.imwrite(f"{new_folder_path}\\Cropped_"+images_and_values[idx][2]+".jpg", images_and_values[idx][1])
+        cv2.imwrite(f"{new_folder_path}\\Mask_" + images_and_values[idx][2]+".jpg", images_and_values[idx][3])
+        cv2.imwrite(f"{new_folder_path}\\Centered_" + images_and_values[idx][2]+".jpg", images_and_values[idx][4])
         excelsheet[f'A{idx+2}'] = images_and_values[idx][6]
         excelsheet[f'B{idx+2}'] = images_and_values[idx][5]
     print(os.path.join(datapath,"Results.xlsx"))

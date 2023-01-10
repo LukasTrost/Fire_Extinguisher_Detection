@@ -40,6 +40,19 @@ def CenterImageInFile(image):
         else:
             break
 
+
+    if row_first_white < 0:
+        row_first_white = 0
+    if col_first_white < 0:
+        col_first_white = 0
+    if row_last_white < 0:
+        row_last_white = image.shape[0] - 1
+    if col_last_white < 0:
+        col_last_white = image.shape[1] - 1
     # Crop the image
     cropped_image = image[row_first_white:row_last_white, col_first_white:col_last_white]
+
+    # If image has no border to cut
+    #if not len(cropped_image):
+    #    cropped_image = image
     return cropped_image
