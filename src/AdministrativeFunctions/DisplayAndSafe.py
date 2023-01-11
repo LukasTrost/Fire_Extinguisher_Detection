@@ -14,7 +14,7 @@ import numpy as np
 def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMaskFunction], resize = True,
                    resizeDimensions = [480,640], datapath_original = "", datapath_cropped = "",
                    displayIdxFromTo = [1,1], displayMasksFromTo = [1,1], maskVariableSteps = [[2],[2,2]],
-                   displayResults = False, safe_Images_as_well = False):
+                   displayResults = False, safe_Images_as_well = False, center_Image = False):
     overallFolder = os.listdir(datapath_original)
     print(overallFolder)
     imageObject = []
@@ -65,7 +65,7 @@ def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMas
                         croppedImage_variation = cropfunction(image, variation)
                         croppedImage_variations.append(croppedImage_variation)
 
-                    if safe_Images_as_well:
+                    if safe_Images_as_well and center_Image:
                         centeredImage_variation = CenterImageInFile(croppedImage_variation)
                         centeredImage_variations.append(centeredImage_variation)
 
@@ -109,4 +109,4 @@ def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMas
 
         DisplayImagesAndCroppedImages(displayObject)
 
-    CreateFolderForResults(imageObject,datapath_cropped, safe_Images_as_well)
+    CreateFolderForResults(imageObject,datapath_cropped, safe_Images_as_well, center_Image)

@@ -30,6 +30,8 @@ CURRENT_OPEN_TYPE = IMAGE_OPEN_TYPES[1]
 
 # TODO überprüfe ob überall auch binarisiert und nicht nur grau (np.where)
 
+
+#TODO check if accuracy is calculated right
 if __name__ == '__main__':
     #print(os.listdir(DATA_PATH_ORIGINAL_IMAGES))
 
@@ -43,4 +45,5 @@ if __name__ == '__main__':
     DisplayAndSave(maskfunctions=maskfunctions, cropfunction=cropfunction, resize=True, resizeDimensions= [30,30],
                    datapath_cropped = DATA_PATH_CROPPED_IMAGES,datapath_original = DATA_PATH_ORIGINAL_IMAGES,
                    displayIdxFromTo = [1,3], displayMasksFromTo = [1,2],
-                   maskVariableSteps = variablesteps, displayResults = False, safe_Images_as_well = True)
+                   maskVariableSteps = variablesteps, displayResults = False, safe_Images_as_well = False,
+                   center_Image = True)

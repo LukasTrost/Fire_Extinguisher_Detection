@@ -4,7 +4,7 @@ import openpyxl
 from matplotlib import pyplot as plt
 
 # checks whether a Folder for results exists, if not creates it
-def CreateFolderForResults(images_and_values, datapath_cropped = "", safe_Images_as_well = False):
+def CreateFolderForResults(images_and_values, datapath_cropped = "", safe_Images_as_well = False, center_image = False):
     # Set a counter to track the number of attempts
     counter = 1
     datapath = datapath_cropped
@@ -61,7 +61,8 @@ def CreateFolderForResults(images_and_values, datapath_cropped = "", safe_Images
                 if safe_Images_as_well:
                     cv2.imwrite(f"{new_folder_path}\\Cropped_"+images_and_values[idx][2]+ filename+".jpg", images_and_values[idx][1][maskIdx][variationIdx])
                     cv2.imwrite(f"{new_folder_path}\\Mask_" + images_and_values[idx][2]+filename+".jpg", images_and_values[idx][3][maskIdx][variationIdx])
-                    cv2.imwrite(f"{new_folder_path}\\Centered_" + images_and_values[idx][2]+filename+".jpg", images_and_values[idx][4][maskIdx][variationIdx])
+                    if center_image:
+                        cv2.imwrite(f"{new_folder_path}\\Centered_" + images_and_values[idx][2]+filename+".jpg", images_and_values[idx][4][maskIdx][variationIdx])
 
     print(os.path.join(datapath,"Results.xlsx"))
     excelfile.save(f'{os.path.join(datapath,"Results.xlsx")}')

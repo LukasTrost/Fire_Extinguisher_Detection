@@ -1,4 +1,4 @@
-
+from matplotlib import pyplot as plt
 def CalculateAccuracy(mask, trueMask):
 
     # take 2 binary (black, white) masks and compare their values
@@ -19,7 +19,7 @@ def CalculateAccuracy(mask, trueMask):
 
     size = mask.shape[0] * mask.shape[1]
 
-    percentage = num_differing_pixels/size
+    percentage = (size-num_differing_pixels)/size
 
     #print(percentage)
     return(percentage)
