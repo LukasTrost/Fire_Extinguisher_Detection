@@ -34,10 +34,13 @@ if __name__ == '__main__':
     #print(os.listdir(DATA_PATH_ORIGINAL_IMAGES))
 
     cropfunction = CropMaskOutOfImage
-    maskfunctions = DefaultMaskFunction
-    DisplayAndSave(maskfunction=maskfunction, cropfunction=cropfunction, resize=True, resizeDimensions= [30,30],
-                   datapath_cropped = DATA_PATH_CROPPED_IMAGES,datapath_original = DATA_PATH_ORIGINAL_IMAGES,
-                   displayAmount = 2)
+    maskfunctions = [[DefaultMaskFunction,DefaultMaskFunction],["Defaultname1","Defaultname2"],
+                     [  [[0,10],[10,30]],[[0,10],[5]]  ]     ]
+    variablesteps = [[2,1],[1,1],[2]]
 
-    # TODO fix bugs,
-    #TODO cropped out images are very glitchy fix that
+    # display parameters are in realvalues not array values, so to display the first 3 images type displayIdxFromTo = [1,3]
+
+    DisplayAndSave(maskfunctions=maskfunctions, cropfunction=cropfunction, resize=True, resizeDimensions= [30,30],
+                   datapath_cropped = DATA_PATH_CROPPED_IMAGES,datapath_original = DATA_PATH_ORIGINAL_IMAGES,
+                   displayIdxFromTo = [1,3], displayMasksFromTo = [1,2], displayMaskVariationsFromTo = [1,2],
+                   maskVariableSteps = variablesteps)

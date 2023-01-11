@@ -7,6 +7,8 @@ def CenterImageInFile(image):
     row_last_white = -1
     col_first_white = -1
     col_last_white = -1
+    #plt.imshow(image)
+    #plt.show()
     for row in range(image.shape[0]):
         if row_first_white == -1:
             for col in range(image.shape[1]):

@@ -22,17 +22,27 @@ def CreateFolderForResults(images_and_values, datapath_cropped = ""):
 
     excelfile = openpyxl.Workbook()
     excelsheet = excelfile.active
-    excelsheet["A1"] = "Folder"
-    excelsheet["B1"] = "Accuracy"
+    excelsheet.title = "Masks and Accuracies"
+    excelsheet.cell(column=1, row=1, value = "Folder")
+
+    # could be done in one nested loop but writing consecutive values is faster
     for idx in range(0, len(images_and_values), 1):
-        new_folder_path = os.path.join(datapath, str(idx + 1))
-        os.makedirs(new_folder_path)
-        cv2.imwrite(f"{new_folder_path}\\Original_image_"+images_and_values[idx][2]+ ".jpg", images_and_values[idx][0])
-        cv2.imwrite(f"{new_folder_path}\\Cropped_"+images_and_values[idx][2]+".jpg", images_and_values[idx][1])
-        cv2.imwrite(f"{new_folder_path}\\Mask_" + images_and_values[idx][2]+".jpg", images_and_values[idx][3])
-        cv2.imwrite(f"{new_folder_path}\\Centered_" + images_and_values[idx][2]+".jpg", images_and_values[idx][4])
-        excelsheet[f'A{idx+2}'] = images_and_values[idx][6]
-        excelsheet[f'B{idx+2}'] = images_and_values[idx][5]
+        excelsheet.cell(column=1, row=idx + 2, value=images_and_values[idx][6])
+
+
+    for maskIdx in range(0, len(images_and_values[0][7]), 1):
+        mask_folder_path = os.path.join(datapath,images_and_values[0][7][maskIdx])
+        excelsheet.cell(column=maskIdx+2, row=1, value=images_and_values[0][7][maskIdx])
+        os.makedirs(mask_folder_path)
+        for idx in range(0, len(images_and_values), 1):
+                new_folder_path = os.path.join(mask_folder_path, str(idx))
+                os.makedirs(new_folder_path)
+                cv2.imwrite(f"{new_folder_path}\\Original_image_"+images_and_values[idx][2]+ ".jpg", images_and_values[idx][0])
+                cv2.imwrite(f"{new_folder_path}\\Cropped_"+images_and_values[idx][2]+".jpg", images_and_values[idx][1][maskIdx])
+                cv2.imwrite(f"{new_folder_path}\\Mask_" + images_and_values[idx][2]+".jpg", images_and_values[idx][3][maskIdx])
+                cv2.imwrite(f"{new_folder_path}\\Centered_" + images_and_values[idx][2]+".jpg", images_and_values[idx][4][maskIdx])
+                excelsheet.cell(column=maskIdx+2, row=idx+2, value = images_and_values[idx][5][maskIdx])
+
     print(os.path.join(datapath,"Results.xlsx"))
     excelfile.save(f'{os.path.join(datapath,"Results.xlsx")}')
     print(f"The directory was filled.")
