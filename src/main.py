@@ -35,12 +35,12 @@ if __name__ == '__main__':
 
     cropfunction = CropMaskOutOfImage
     maskfunctions = [[DefaultMaskFunction,DefaultMaskFunction],["Defaultname1","Defaultname2"],
-                     [  [[0,10],[10,30]],[[0,10],[5]]  ]     ]
+                     [  [[0,10],30],[10 , 5]  ]     ]
     variablesteps = [[2,1],[1,1],[2]]
 
     # display parameters are in realvalues not array values, so to display the first 3 images type displayIdxFromTo = [1,3]
 
     DisplayAndSave(maskfunctions=maskfunctions, cropfunction=cropfunction, resize=True, resizeDimensions= [30,30],
                    datapath_cropped = DATA_PATH_CROPPED_IMAGES,datapath_original = DATA_PATH_ORIGINAL_IMAGES,
-                   displayIdxFromTo = [1,3], displayMasksFromTo = [1,2], displayMaskVariationsFromTo = [1,2],
-                   maskVariableSteps = variablesteps)
+                   displayIdxFromTo = [1,3], displayMasksFromTo = [1,2],
+                   maskVariableSteps = variablesteps, displayResults = False, safe_Images_as_well = True)

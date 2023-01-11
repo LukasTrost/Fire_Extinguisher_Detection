@@ -21,8 +21,8 @@ def DisplayImagesAndCroppedImages(images_and_crops):
                 ax[img_idx*2+1].axis('off')
             word = ""
             for name_part in range (1,len(images_and_crops[img_idx][3][mask_Idx][mask_vari_Idx]),2):
-                word = word + str(images_and_crops[0][3][mask_Idx][mask_vari_Idx][name_part])
-            fig.suptitle(name + word,fontsize=16)
+                word = word + str(images_and_crops[0][3][mask_Idx][mask_vari_Idx][name_part]) + " "
+            fig.suptitle(name+ " " + word,fontsize=16)
             plt.show()
 """
 

@@ -14,11 +14,10 @@ import numpy as np
 def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMaskFunction], resize = True,
                    resizeDimensions = [480,640], datapath_original = "", datapath_cropped = "",
                    displayIdxFromTo = [1,1], displayMasksFromTo = [1,1], maskVariableSteps = [[2],[2,2]],
-                   displayMaskVariationsFromTo = [1,2]):
+                   displayResults = False, safe_Images_as_well = False):
     overallFolder = os.listdir(datapath_original)
     print(overallFolder)
     imageObject = []
-    image_and_crop = []
     pbar = tqdm(total=len(overallFolder), colour='#FF69B4')
     for folder in overallFolder:
         image = None
@@ -39,16 +38,19 @@ def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMas
             #print("Image was found so procede")
             if resize:
                 image = ResizeFunction(image, resizeDimensions)
-            masks = []
-            croppedImages = []
-            centeredImages = []
-            accuracies = []
-            concrete_value_combinations = []
+
             if trueMask is not None:
                 if resize:
                     trueMask = ResizeFunction(trueMask, resizeDimensions)
             else:
                 print("No Ground Truth Mask Found")
+
+
+            masks = []
+            croppedImages = []
+            centeredImages = []
+            accuracies = []
+            concrete_value_combinations = []
 
             for idx, maskfunction in enumerate (maskfunctions[0]):
                 concrete_values, mask_variations = maskfunction(image, maskVariableSteps[idx], maskfunctions[2][idx])
@@ -59,15 +61,20 @@ def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMas
                 accuracy_variations = []
 
                 for variation in mask_variations:
-                    croppedImage_variation = cropfunction(image, variation)
-                    croppedImage_variations.append(croppedImage_variation)
-                    centeredImage_variation = CenterImageInFile(croppedImage_variation)
-                    centeredImage_variations.append(centeredImage_variation)
+                    if safe_Images_as_well or displayResults:
+                        croppedImage_variation = cropfunction(image, variation)
+                        croppedImage_variations.append(croppedImage_variation)
+
+                    if safe_Images_as_well:
+                        centeredImage_variation = CenterImageInFile(croppedImage_variation)
+                        centeredImage_variations.append(centeredImage_variation)
+
                     if trueMask is not None:
                         accuracy_variation = CalculateAccuracy(variation, np.where(cv2.cvtColor(trueMask, cv2.COLOR_BGR2GRAY) > 0, 1, 0))
                         accuracy_variations.append(accuracy_variation)
                     else:
                         accuracy_variations.append("No Ground Truth")
+
                 croppedImages.append(croppedImage_variations)
                 centeredImages.append(centeredImage_variations)
                 accuracies.append(accuracy_variations)
@@ -78,28 +85,28 @@ def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMas
             print("ERROR,no Image in folder: ")
     #TODO replace with list comprehension of the sort displayObject = [subarray[:2] for subarray in imageObject]
 
-    displayObject = []
-    for imageIdx in range(displayIdxFromTo[0]-1, min([displayIdxFromTo[1], len(imageObject)]),1):
+    if displayResults:
+        displayObject = []
+        for imageIdx in range(displayIdxFromTo[0]-1, min([displayIdxFromTo[1], len(imageObject)]),1):
 
-        maskObject = []
-        croppedObject = []
-        concrete_values_Object = []
+            maskObject = []
+            croppedObject = []
+            concrete_values_Object = []
 
-        for maskIDx in range(displayMasksFromTo[0]-1, min([displayMasksFromTo[1], len(maskfunctions)]), 1):
-            maskObject.append(imageObject[imageIdx][7][maskIDx])
-            all_concrete_values = []
-            all_cropped_images = []
-            for variationIdx in range (displayMaskVariationsFromTo[0]-1, min([displayMaskVariationsFromTo[1],
-                                                                              len(imageObject[imageIdx][8][maskIDx])]), 1):
-                all_cropped_images.append(imageObject[imageIdx][1][maskIDx][variationIdx])
-                all_concrete_values.append(imageObject[imageIdx][8][maskIDx][variationIdx])
+            for maskIDx in range(displayMasksFromTo[0]-1, min([displayMasksFromTo[1], len(maskfunctions)]), 1):
+                maskObject.append(imageObject[imageIdx][7][maskIDx])
+                all_concrete_values = []
+                all_cropped_images = []
+                for variationIdx in range (0, len(imageObject[imageIdx][8][maskIDx]), 1):
+                    all_cropped_images.append(imageObject[imageIdx][1][maskIDx][variationIdx])
+                    all_concrete_values.append(imageObject[imageIdx][8][maskIDx][variationIdx])
 
-            croppedObject.append(all_cropped_images)
-            concrete_values_Object.append(all_concrete_values)
+                croppedObject.append(all_cropped_images)
+                concrete_values_Object.append(all_concrete_values)
 
-        #print(imageObject[imageIdx][0:2])
-        displayObject.append([imageObject[imageIdx][0],croppedObject,maskObject,concrete_values_Object])
+            #print(imageObject[imageIdx][0:2])
+            displayObject.append([imageObject[imageIdx][0],croppedObject,maskObject,concrete_values_Object])
 
-    DisplayImagesAndCroppedImages(displayObject)
+        DisplayImagesAndCroppedImages(displayObject)
 
-    #CreateFolderForResults(imageObject,datapath_cropped)
+    CreateFolderForResults(imageObject,datapath_cropped, safe_Images_as_well)
