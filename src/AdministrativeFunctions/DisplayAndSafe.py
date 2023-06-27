@@ -4,21 +4,22 @@ from src.FolderFunctions.CreateFolderHierarchy import CreateFolderForResults
 import os
 import cv2
 from src.MaskFunctions.DefaultMaskFunction import DefaultMaskFunction
+from src.MaskFunctions.Extinguisher_Net import Extinguisher_Net
 from src.CropFunctions.CropMaskOutOfImage import CropMaskOutOfImage
 from src.ResizeFunctions.CenterImageInFile import CenterImageInFile
-from src.AccuracyCalculation.CalculateAccuracy import CalculateAccuracy
+from src.AccuracyCalculation.CalculateAccuracy import CalculateAccuracyAndIoU
 from matplotlib import pyplot as plt
-from tqdm import tqdm
+
 import numpy as np
 
 def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMaskFunction], resize = True,
-                   resizeDimensions = [480,640], datapath_original = "", datapath_cropped = "",
+                   resizeDimensions = [640,640], datapath_original = "", datapath_cropped = "",
                    displayIdxFromTo = [1,1], displayMasksFromTo = [1,1], maskVariableSteps = [[2],[2,2]],
                    displayResults = False, safe_Images_as_well = False, center_Image = False):
     overallFolder = os.listdir(datapath_original)
     print(overallFolder)
     imageObject = []
-    pbar = tqdm(total=len(overallFolder), colour='#FF69B4')
+
     for folder in overallFolder:
         image = None
         trueMask = None
@@ -50,15 +51,18 @@ def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMas
             croppedImages = []
             centeredImages = []
             accuracies = []
+            IoUs = []
             concrete_value_combinations = []
 
             for idx, maskfunction in enumerate (maskfunctions[0]):
-                concrete_values, mask_variations = maskfunction(image, maskVariableSteps[idx], maskfunctions[2][idx])
+                print(itemName)
+                concrete_values, mask_variations = maskfunction(image, maskVariableSteps[idx], maskfunctions[2][idx], itemName)
 
                 masks.append(mask_variations)
                 croppedImage_variations = []
                 centeredImage_variations = []
                 accuracy_variations = []
+                IoU_variations = []
 
                 for variation in mask_variations:
                     if safe_Images_as_well or displayResults:
@@ -70,17 +74,20 @@ def DisplayAndSave(cropfunction =CropMaskOutOfImage, maskfunctions = [DefaultMas
                         centeredImage_variations.append(centeredImage_variation)
 
                     if trueMask is not None:
-                        accuracy_variation = CalculateAccuracy(variation, np.where(cv2.cvtColor(trueMask, cv2.COLOR_BGR2GRAY) > 0, 1, 0))
+                        accuracy_variation, IoU = CalculateAccuracyAndIoU(variation, np.where(cv2.cvtColor(trueMask, cv2.COLOR_BGR2GRAY) > 0, 1, 0))
                         accuracy_variations.append(accuracy_variation)
+                        IoU_variations.append(IoU)
                     else:
                         accuracy_variations.append("No Ground Truth")
+                        IoU_variations.append("No Ground Truth")
 
                 croppedImages.append(croppedImage_variations)
                 centeredImages.append(centeredImage_variations)
                 accuracies.append(accuracy_variations)
                 concrete_value_combinations.append(concrete_values)
-            imageObject.append([image, croppedImages, folder.title(), masks, centeredImages, accuracies, folder, maskfunctions[1], concrete_value_combinations])
-            pbar.update(1)
+                IoUs.append(IoU_variations)
+            imageObject.append([image, croppedImages, folder.title(), masks, centeredImages, accuracies, folder, maskfunctions[1], concrete_value_combinations,IoUs ])
+
         else:
             print("ERROR,no Image in folder: ")
     #TODO replace with list comprehension of the sort displayObject = [subarray[:2] for subarray in imageObject]

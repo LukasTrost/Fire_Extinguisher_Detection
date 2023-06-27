@@ -6,7 +6,7 @@ def CalculateStep(step,stepsize,bottom_Value):
 
 def DefaultMaskFunction(image, variableSteps, bottom_and_top):
 
-    print(bottom_and_top)
+
 
     # Holds the values for
     step_Values = []

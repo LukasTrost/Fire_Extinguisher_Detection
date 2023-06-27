@@ -43,7 +43,7 @@ def CreateFolderForResults(images_and_values, datapath_cropped = "", safe_Images
         if safe_Images_as_well:
             os.makedirs(mask_folder_path)
         for idx in range(0, len(images_and_values), 1):
-            maskSheet.cell(column=1, row=idx+2, value=images_and_values[idx][6])
+            maskSheet.cell(column=1, row=idx+3, value=images_and_values[idx][6])
             if safe_Images_as_well:
                 new_folder_path = os.path.join(mask_folder_path, str(idx+1))
                 os.makedirs(new_folder_path)
@@ -56,8 +56,11 @@ def CreateFolderForResults(images_and_values, datapath_cropped = "", safe_Images
                 for wordpart in range(1, len(images_and_values[idx][8][maskIdx][variationIdx]), 2):
                     filename = "_" + filename + str(images_and_values[idx][8][maskIdx][variationIdx][wordpart])
 
-                maskSheet.cell(column=variationIdx+2, row=1, value=word)
-                maskSheet.cell(column=variationIdx+2, row=idx+2, value = images_and_values[idx][5][maskIdx][variationIdx])
+                maskSheet.cell(column=(variationIdx*2)+2, row=1, value=word)
+                maskSheet.cell(column=(variationIdx * 2) + 2, row=2, value="Accuracy")
+                maskSheet.cell(column=(variationIdx * 2) + 3, row=2, value="IoU")
+                maskSheet.cell(column=(variationIdx*2)+2, row=idx+3, value = images_and_values[idx][5][maskIdx][variationIdx])
+                maskSheet.cell(column=(variationIdx*2)+3, row=idx+3, value = images_and_values[idx][9][maskIdx][variationIdx])
                 if safe_Images_as_well:
                     cv2.imwrite(f"{new_folder_path}\\Cropped_"+images_and_values[idx][2]+ filename+".jpg", images_and_values[idx][1][maskIdx][variationIdx])
                     cv2.imwrite(f"{new_folder_path}\\Mask_" + images_and_values[idx][2]+filename+".jpg", images_and_values[idx][3][maskIdx][variationIdx])
