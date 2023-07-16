@@ -9,8 +9,11 @@ from src.AdministrativeFunctions.DisplayAndSafe import DisplayAndSave
 from src.CropFunctions.CropMaskOutOfImage import CropMaskOutOfImage
 # Current implementation Saves Cropped Images in the same parent folder as Original Images
 
-
-DATA_PATH = "D:/Programmieren/MasterOfDisaster/Experiments_and_Implementations/Extinguisher_Net"
+current_file_path = os.path.abspath(__file__)
+# Get the directory containing the current file
+current_directory = os.path.dirname(current_file_path)
+parentdir = os.path.dirname(current_directory)
+DATA_PATH = os.path.join(parentdir, "runs")
 DATA_PATH_ORIGINAL_IMAGES = os.path.join(DATA_PATH, "Resized_Images_640")
 DATA_PATH_CROPPED_IMAGES = os.path.join(DATA_PATH, "TestRuns\CroppedImages")
 
@@ -22,7 +25,7 @@ CURRENT_OPEN_TYPE = IMAGE_OPEN_TYPES[1]
 
 
 if __name__ == '__main__':
-    #print(os.listdir(DATA_PATH_ORIGINAL_IMAGES))
+
 
     cropfunction = CropMaskOutOfImage
     maskfunctions = [[Extinguisher_Net],["Extinguisher_Net"],
