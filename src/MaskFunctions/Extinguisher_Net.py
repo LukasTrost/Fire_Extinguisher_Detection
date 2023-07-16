@@ -1245,11 +1245,6 @@ def Perform_Extinguisher_Net(image,variables):
 def Extinguisher_Net(image, variableSteps, bottom_and_top,address):
     # Holds the values for
 
-    #print(bottom_and_top)
-    #plt.imshow(image)
-    #plt.show()
-    #print(variableSteps)
-
     step_Values = []
     for valueIdx in range(len(bottom_and_top)):
         step_Values.append([])
@@ -1352,11 +1347,5 @@ def Extinguisher_Net(image, variableSteps, bottom_and_top,address):
                                     mask_variations.append(finmask)
                                     cv2.imwrite(os.path.join("D:/Programmieren/MasterOfDisaster/Experiments_and_Implementations/Extinguisher_Net/images",address),  finmask)
 
-    """
-    for immask in mask_variations:
-        plt.imshow(immask)
-        plt.show()
-        plt.imshow(image)
-        plt.show()
-    """
+
     return  used_variables, mask_variations
